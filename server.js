@@ -11,24 +11,45 @@ app.use( (req, res, next) => {
 
 app.get('/games', async (req, res) => {
     try {
-        const { year, week, seasonType, division } = req.query;
+        const { year, week, seasonType, division } = req.query
         
-        const apiUrl = `https://api.collegefootballdata.com/games?year=${year}&week=${week}&seasonType=${seasonType}&division=${division}`;
+        const apiUrl = `https://api.collegefootballdata.com/games?year=${year}&week=${week}&seasonType=${seasonType}&division=${division}`
         const response = await fetch(apiUrl, {
             headers: {
                 Authorization: `Bearer ${process.env.API_KEY}`
             }
-        });
+        })
         
         if (!response.ok) {
-            return res.status(response.status).json({ message: response.message });
+            return res.status(response.status).json({ message: response.message })
         }
         
-        const data = await response.json();
-        res.json(data);
+        const data = await response.json()
+        res.json(data)
     } catch (error) {
-        console.log(error)
-        res.status(500).json({ message: 'Server error' });
+        res.status(500).json({ message: 'Server error' })
+    }
+})
+
+app.get('/rankings', async (req, res) => {
+    try {
+        const { year, week, seasonType } = req.query
+
+        const apiUrl = `https://api.collegefootballdata.com/rankings?year=${year}&week=${week}&seasonType=${seasonType}`
+        const response = await fetch(apiUrl, {
+            headers: {
+                Authorization: `Bearer ${process.env.API_KEY}`
+            }
+        })
+
+        if (!response.ok) {
+            return res.status(response.status).json({ message: response.message })
+        }
+
+        const data = await response.json()
+        res.json(data)
+    } catch (error) {
+        res.status(500).json({ message: 'Server error' })
     }
 })
 
